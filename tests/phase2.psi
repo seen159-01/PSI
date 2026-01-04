@@ -1,0 +1,5 @@
+(def h (* h 0))
+(def h (cons 1 h))
+(def h (quote h))
+(def h (cons 1 h))
+(quit)

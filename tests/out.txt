@@ -1,0 +1,28 @@
+0 psi> (def h (* h 0))
+
+( def WS h WS ( * WS h WS 0 ) ) 
+
+answer: $error{unbound-var: h}
+
+1 psi> (def h (cons 1 h))
+
+( def WS h WS ( cons WS 1 WS h ) ) 
+
+answer: $error{msg}
+
+2 psi> (def h (quote h))
+
+( def WS h WS ( quote WS h ) ) 
+
+answer: pval_symbol: h
+
+3 psi> (def h (cons 1 h))
+
+( def WS h WS ( cons WS 1 WS h ) ) 
+
+answer: $error{value-error: h}
+
+4 psi> (quit)
+( quit ) 
+
+Quitting...

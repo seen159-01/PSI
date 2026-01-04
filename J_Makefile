@@ -1,0 +1,51 @@
+# Compiler and flags
+CC      := clang
+CFLAGS  := -g -Wall -Wextra -Iinclude
+
+# Directories
+SRC_DIR := src
+OBJ_DIR := build/obj
+BIN_DIR := build
+
+# Target executable (defaults to folder name)
+TARGET  := $(BIN_DIR)/$(notdir $(CURDIR))
+
+# Source and object files
+SRC := $(wildcard $(SRC_DIR)/*.c)
+OBJ := $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRC))
+
+# Default rule
+all: dirs $(TARGET)
+
+# Link step
+$(TARGET): $(OBJ)
+	$(CC) $(CFLAGS) -o $@ $^
+
+# Compile step
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | dirs
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Create directories if they don't exist
+.PHONY: dirs
+dirs:
+	@mkdir -p $(BIN_DIR) $(OBJ_DIR)
+
+# Clean build artifacts
+.PHONY: clean
+clean:
+	rm -rf $(OBJ_DIR) $(TARGET) $(BIN_DIR)
+
+# First clean then build all
+.PHONY: rebuild
+rebuild: clean all
+
+
+# Run automated tests (Phase 1)
+test: $(TARGET)
+	@echo "🧪 Running PSI tests..."
+# 	@mkdir -p tests
+	@./$(TARGET) < tests/phase1.psi > tests/out.txt
+	@echo "🔍 Comparing output..."
+	@diff -u tests/expected.txt tests/out.txt && \
+		echo "✅ All tests passed!" || \
+		(echo "❌ Test output differs. See diff above."; exit 1)

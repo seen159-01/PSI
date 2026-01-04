@@ -1,0 +1,5 @@
+*.ini
+
+# Build files
+build/
+**/*.o
